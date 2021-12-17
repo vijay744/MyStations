@@ -2,7 +2,12 @@
     <string name="app_name">MyStations</string>
     <string name="enter_url">Enter Url</string>
     <string name="url_should_not_be_empty">Url should not be empty</string>
+    <string name="enter_valid_url">Enter valid url</string>
     <string name="please_check_network_connection">Please check network connection</string>
-    <string name="something_went_wrong">Something went wrong</string>
+    <string name="something_went_wrong">Something went wrong! Please check your url</string>
     <string name="submit">Submit</string>
+    <string name="stations_list">Stations List</string>
+    <string name="zero_stations">No Stations Found</string>
+    <string name="please_Wait">Please Wait</string>
+
 </resources>
