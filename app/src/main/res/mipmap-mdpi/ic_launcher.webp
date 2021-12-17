@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--<string name="app_name">FarmerApp</string>-->
+    <string name="app_name">FarmerAppTest</string>//test
+<!--    <string name="app_name">FarmerAppDemo</string> //demo-->
+    <string name="str_current_day">Mon</string>
+    <string name="str_current_date">25 Aug</string>
+    <string name="str_temp_celcus">30 C</string>
+    <string name="str_percent">60%</string>
+    <string name="str_txt_humidity">Humidity</string>
+    <string name="str_date_and_time">25 Jun 2019</string>
+    <string name="str_due_point">Due Point</string>
+    <string name="str_wind">Wind</string>
+    <string name="str_wind_value">5 km/h</string>
+    <string name="discard">Do you want to Discard?</string>
+    <string name="total_register_count">Register / Total</string>
+    <string name="msg_internet_connection">इंटरनेट कनेक्शन उपलब्ध नाही, कृपया आपले कन�

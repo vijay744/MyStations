@@ -1,0 +1,150 @@
+package agreeta.com.ltfarmerapplication.services;
+
+import android.app.Dialog;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.CountDownTimer;
+import android.os.IBinder;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+import agreeta.com.ltfarmerapplication.R;
+import agreeta.com.ltfarmerapplication.app.MyApp;
+import agreeta.com.ltfarmerapplication.utils.Constants;
+import agreeta.com.ltfarmerapplication.utils.IOUtils;
+
+public class MusicService extends Service {
+    private SimpleExoPlayer simpleExoPlayer;
+    private long playbackPosition;
+    private boolean playWhenReady = true;
+    private int currentWindow = 0;
+    private ImageButton ibPlayPause;
+    private LinearProgressIndicator progressIndicator, progressLoadingIndicator;
+    private TextView tvSongName;
+    private long realDurationMillis = 0L;
+    private Dialog d;
+    //    private ImageButton dibPlayPause;
+    private TextView tvCurrentTime, tvTotalTime;
+    private CountDownTimer countDownTimer;
+    private Context BASE_CONTEXT;
+
+    private void initPlayer() {
+        /*if (MyApp.cache.readInteger(BASE_CONTEXT, Constants.SESSION_PLAYBACK_STATE, 4) ==
+                ExoPlayer.STATE_ENDED) {
+            playbackPosition = 0;
+        } else*/
+        playbackPosition = MyApp.cache.readLong(BASE_CONTEXT, Constants.SESSION_PLAYBACK_POSITION, 0L);
+
+
+        simpleExoPlayer = new SimpleExoPlayer.Builder(BASE_CONTEXT).build();
+    }
+
+    private void preparePlayer(String videoUrl) {
+        Uri uri = Uri.parse(videoUrl);
+        simpleExoPlayer.setMediaItem(MediaItem.fromUri(uri));
+        simpleExoPlayer.setPlayWhenReady(playWhenReady);
+        simpleExoPlayer.seekTo(currentWindow, playbackPosition);
+        simpleExoPlayer.prepare();
+    }
+
+    private void releasePlayer() {
+        playbackPosition = simpleExoPlayer.getCurrentPosition();
+        MyApp.cache.writeLong(BASE_CONTEXT, Constants.SESSION_PLAYBACK_POSITION, playbackPosition);
+        MyApp.cache.writeInteger(BASE_CONTEXT, Constants.SESSION_PLAYBACK_STATE, simpleExoPlayer.getPlaybackState());
+
+        currentWindow = simpleExoPlayer.getCurrentWindowIndex();
+        playWhenReady = simpleExoPlayer.getPlayWhenReady();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+        simpleExoPlayer.release();
+
+        simpleExoPlayer = null;
+    }
+
+    private MusicServiceBinder audioServiceBinder = new MusicServiceBinder();
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return audioServiceBinder;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+//        if (Build.VERSION.SDK_INT > 26)
+//            startForeground(1, null);
+//        BASE_CONTEXT = this;
+//        initPlayer();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+//        preparePlayer(getString(R.string.sample_mp3_url));
+////        ibPlayPause.setImageResource(R.drawable.ic_play);
+//        countDownTimer = new CountDownTimer(Long.MAX_VALUE, 1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                if (simpleExoPlayer != null && simpleExoPlayer.isPlaying()) {
+////                    tvCurrentTime.setText(IOUtils.convertMilliSeconds(simpleExoPlayer.getCurrentPosition()));
+////                    progressIndicator.setProgress(Integer.parseInt("" + (simpleExoPlayer.getCurrentPosition() * 100 / simpleExoPlayer.getDuration())));
+//                }
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//
+//            }
+//        }.start();
+//        simpleExoPlayer.addListener(new Player.Listener() {
+//
+//            @Override
+//            public void onPlaybackStateChanged(int playbackState) {
+//                if (playbackState == ExoPlayer.STATE_READY) {
+//                    realDurationMillis = simpleExoPlayer.getDuration();
+//                    tvTotalTime.setText(IOUtils.convertMilliSeconds(realDurationMillis));
+//                } else if (playbackState == ExoPlayer.STATE_ENDED) {
+//                    MyApp.cache.writeLong(BASE_CONTEXT, Constants.SESSION_PLAYBACK_STATE,
+//                            playbackState);
+//
+//                }
+//                MyApp.cache.writeLong(BASE_CONTEXT, Constants.SESSION_PLAYBACK_POSITION,
+//                        simpleExoPlayer.getCurrentPosition());
+//            }
+//
+//            @Override
+//            public void onIsPlayingChanged(boolean isPlaying) {
+//                Log.d("TAG", "onIsPlayingChanged " + isPlaying);
+//                tvSongName.setSelected(isPlaying);
+//                MyApp.cache.writeLong(BASE_CONTEXT, Constants.SESSION_PLAYBACK_POSITION,
+//                        simpleExoPlayer.getCurrentPosition());
+//                if (isPlaying) {
+//
+//                    ibPlayPause.setImageResource(R.drawable.ic_pause);
+//
+//
+//                } else {
+//                    ibPlayPause.setImageResource(R.drawable.ic_play);
+////                    if(d!= null && d.isShowing()){
+////                        dibPlayPause.setImageResource(R.drawable.ic_pause_circle);
+////                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onIsLoadin

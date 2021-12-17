@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyStations</string>
+    <string name="enter_url">Enter Url</string>
+    <string name="url_should_not_be_empty">Url should not be empty</string>
+    <string name="please_check_network_connection">Please check network connection</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="submit">Submit</string>
+</resources>

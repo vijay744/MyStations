@@ -1,0 +1,120 @@
+package agreeta.com.ltfarmerapplication.services;
+
+import android.content.Context;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.Handler;
+import android.os.Message;
+
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+
+import java.io.IOException;
+
+import agreeta.com.ltfarmerapplication.R;
+import agreeta.com.ltfarmerapplication.app.MyApp;
+import agreeta.com.ltfarmerapplication.utils.Constants;
+
+//public class MusicServiceBinder extends Binder {
+//    int currentPosition = 0;
+//    SimpleExoPlayer simpleExoPlayer;
+//
+//}
+
+
+public class MusicServiceBinder extends Binder {
+    // Save local audio file uri ( local storage file. ).
+//    private Uri audioFileUri = null;
+    // Save web audio file url.
+//    private String audioFileUrl = "";
+    // Check if stream audio.
+    private boolean streamAudio = false;
+    // Media player that play audio.
+    public SimpleExoPlayer audioPlayer = null;
+    // Caller activity context, used when play local audio file.
+    private Context context = null;
+    // This Handler object is a reference to the caller activity's Handler.
+    // In the caller activity's handler, it will update the audio play progress.
+    private Handler audioProgressUpdateHandler;
+    // This is the message signal that inform audio progress updater to update audio progress.
+    public final int UPDATE_AUDIO_PROGRESS_BAR = 1;
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    //    public String getAudioFileUrl() {
+//        return audioFileUrl;
+//    }
+//    public void setAudioFileUrl(String audioFileUrl) {
+//        this.audioFileUrl = audioFileUrl;
+//    }
+    public boolean isStreamAudio() {
+        return streamAudio;
+    }
+
+    public void setStreamAudio(boolean streamAudio) {
+        this.streamAudio = streamAudio;
+    }
+
+    //    public Uri getAudioFileUri() {
+//        return audioFileUri;
+//    }
+//    public void setAudioFileUri(Uri audioFileUri) {
+//        this.audioFileUri = audioFileUri;
+//    }
+    public Handler getAudioProgressUpdateHandler() {
+        return audioProgressUpdateHandler;
+    }
+
+    public void setAudioProgressUpdateHandler(Handler audioProgressUpdateHandler) {
+        this.audioProgressUpdateHandler = audioProgressUpdateHandler;
+    }
+
+    // Start play audio.
+    public void startAudio() {
+//        initAudioPlayer();
+        if (audioPlayer != null) {
+            audioPlayer.play();
+        }
+    }
+
+    // Pause playing audio.
+    public void pauseAudio() {
+        if (audioPlayer != null) {
+            audioPlayer.pause();
+        }
+    }
+
+    // Stop play audio.
+    public void stopAudio() {
+        if (audioPlayer != null) {
+            audioPlayer.stop();
+            destroyAudioPlayer();
+        }
+    }
+
+    // Initialise audio player.
+    public void initAudioPlayer() {
+        try {
+            if (audioPlayer == null) {
+                audioPlayer = new SimpleExoPlayer.Builder(context).build();
+
+
+                long playbackPosition = MyApp.cache.readLong(context, Constants.SESSION_PLAYBACK_POSITION, 0L);
+
+                Uri uri = Uri.parse(Constants.RADIO_URL);
+                audioPlayer.setMediaItem(MediaItem.fromUri(uri));
+                audioPlayer.setPlayWhenReady(true);
+                audioPlayer.seekTo(0, playbackPosition);
+                audioPlayer.prepare();
+
+                // This thread object will send update audio progress message to caller activity every 1 second.
+                Thread updateAudioProgressThread = new Thread() {
+                    @Override
+                    public void run() {
+               
