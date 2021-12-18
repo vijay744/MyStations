@@ -33,11 +33,15 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull StationsAdapter.MyViewHolder myViewHolder, int i) {
         ModelStation station = stationArrayList.get(i);
-        myViewHolder.binding.tvStationName.setText(station.getName());
-        if (station.getUrl() != null)
+        myViewHolder.binding.tvStationName.setText(station.getName() != null ? station.getName() : "Unknown station name");
+        myViewHolder.binding.tvStationId.setText("Station ID: "+(station.getId() != null ? station.getId() : "Unknown"));
+        if (station.getUrl() != null) {
             myViewHolder.binding.ivStationImage.setImageUrl(station.getUrl(), NetworkHelper.getInstance(context).getImageLoader());
-        myViewHolder.binding.ivStationImage.setErrorImageDrawable(context.getDrawable(R.drawable.ic_error));
-        myViewHolder.binding.ivStationImage.setDefaultImageDrawable(context.getDrawable(R.drawable.ic_download));
+            myViewHolder.binding.ivStationImage.setErrorImageDrawable(context.getDrawable(R.drawable.ic_error));
+            myViewHolder.binding.ivStationImage.setDefaultImageDrawable(context.getDrawable(R.drawable.ic_download));
+        } else {
+            myViewHolder.binding.ivStationImage.setDefaultImageDrawable(context.getDrawable(R.drawable.ic_image));
+        }
     }
 
     @Override

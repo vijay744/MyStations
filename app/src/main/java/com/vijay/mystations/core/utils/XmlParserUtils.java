@@ -63,7 +63,7 @@ public class XmlParserUtils {
                 id = readId(parser);
             } else if (name.equals(Constants.STATION_NAME)) {
                 stationName = readName(parser);
-            } else if (name.equals(Constants.STATION_URL)) {
+            } else if (name.equals(Constants.LOGO)) {
                 link = readLink(parser);
             } else {
                 skip(parser);
@@ -88,9 +88,9 @@ public class XmlParserUtils {
     }
 
     private static String readLink(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, Constants.STATION_URL);
+        parser.require(XmlPullParser.START_TAG, ns, Constants.LOGO);
         String summary = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, Constants.STATION_URL);
+        parser.require(XmlPullParser.END_TAG, ns, Constants.LOGO);
         return summary;
     }
 

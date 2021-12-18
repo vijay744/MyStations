@@ -4,10 +4,12 @@
     <string name="url_should_not_be_empty">Url should not be empty</string>
     <string name="enter_valid_url">Enter valid url</string>
     <string name="please_check_network_connection">Please check network connection</string>
-    <string name="something_went_wrong">Something went wrong! Please check your url</string>
+    <string name="something_went_wrong_url">Something went wrong! Please check your URL.</string>
+    <string name="something_went_wrong">Something went wrong! Unable to establish connection.</string>
     <string name="submit">Submit</string>
     <string name="stations_list">Stations List</string>
     <string name="zero_stations">No Stations Found</string>
+    <string name="stations_loading">Stations are being loaded</string>
     <string name="please_Wait">Please Wait</string>
 
 </resources>

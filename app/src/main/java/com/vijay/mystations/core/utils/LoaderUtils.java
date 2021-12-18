@@ -12,7 +12,7 @@ public class LoaderUtils {
         if (context != null) {
             if (proDialog == null)
                 proDialog = ProgressDialog.show(context, null, context.getString(R.string.please_Wait));
-            proDialog.setCancelable(false);
+            proDialog.setCancelable(true);
         }
 
     }

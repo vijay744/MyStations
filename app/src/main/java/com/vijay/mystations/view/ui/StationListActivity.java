@@ -1,15 +1,19 @@
 package com.vijay.mystations.view.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.vijay.mystations.R;
 import com.vijay.mystations.core.app.MyStationsApp;
 import com.vijay.mystations.core.network.Result;
 import com.vijay.mystations.core.utils.LoaderUtils;
@@ -46,6 +50,7 @@ public class StationListActivity extends AppCompatActivity {
                     case ERROR:
                         LoaderUtils.stopLoading();
                         Snackbar.make(binding.getRoot(), result.message, Snackbar.LENGTH_LONG).show();
+                        binding.tvEmpty.setText(result.message);
                         break;
                     case SUCCESS:
                         LoaderUtils.stopLoading();
@@ -53,17 +58,19 @@ public class StationListActivity extends AppCompatActivity {
                         break;
                     case LOADING:
                         LoaderUtils.startLoadingPleaseWait(StationListActivity.this);
+                        binding.tvEmpty.setText(getString(R.string.stations_loading));
                         break;
                 }
             }
         });
-        if (viewModel.getStations().getValue().data.isEmpty())
+        if (viewModel.getStations().getValue().status != Result.Status.ERROR && (viewModel.getStations().getValue().data == null || (viewModel.getStations().getValue().data != null && viewModel.getStations().getValue().data.isEmpty())))
             viewModel.fetchStations(MyStationsApp.getInstance().url);
     }
 
     private void setRecyclerAdapter(ArrayList<ModelStation> list) {
         Log.d("TAG", "" + list.size());
         if (list.isEmpty()) {
+            binding.tvEmpty.setText(getString(R.string.zero_stations));
             binding.tvEmpty.setVisibility(View.VISIBLE);
         } else {
             binding.tvEmpty.setVisibility(View.GONE);
@@ -74,5 +81,12 @@ public class StationListActivity extends AppCompatActivity {
             binding.rvStations.setLayoutManager(linearLayoutManager);
             binding.rvStations.setAdapter(adapter);
         }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LoaderUtils.stopLoading();
     }
 }
