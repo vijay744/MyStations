@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
         rootView = binding.getRoot();
 
         setContentView(rootView);
-        //TODO remove before submitting
-        binding.etEnterUrl.setText(URL);
         initListener();
     }
 
